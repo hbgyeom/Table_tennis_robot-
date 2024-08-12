@@ -9,16 +9,15 @@
 
 | 유정현 | 이태웅 | 황보겸 |
 | :-: | :-: | :-: |
-| <img src='https://github.com/Chii-kawa.png' height=130 width=130></img> | <img src='https://github.com/siu-Kyu.png' height=130 width=130></img> | <img src='https://github.com/hwankatarinabluu.png' height=130 width=130></img>
-| <a href="https://github.com/Chii-kawa" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/siu-Kyu" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/hwankatarinabluu" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | 
+| <img src='https://github.com/Chii-kawa.png' height=130 width=130></img> | <img src='https://github.com/taewoong1.png' height=130 width=130></img> | <img src='https://github.com/hbgyeom.png' height=130 width=130></img>
+| <a href="https://github.com/Chii-kawa" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/siu-Kyu" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/hbgyeom" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | 
 
 <br>
 
 ## 1. Overview
 
-![image](https://github.com/user-attachments/assets/9fae7b3e-d367-4d27-9e18-d6e52d8b20ca)
+![image](https://github.com/user-attachments/assets/9fae7b3e-d367-4d27-9e18-d6e52d8b20ca)|
 <br><br>
-
 ![image](https://github.com/user-attachments/assets/4d2dc9e1-add1-46b5-951f-bf11ed313d98)
 <br><br>
 
