@@ -10,7 +10,7 @@
 | 유정현 | 이태웅 | 황보겸 |
 | :-: | :-: | :-: |
 | <img src='https://github.com/Chii-kawa.png' height=130 width=130></img> | <img src='https://github.com/taewoong1.png' height=130 width=130></img> | <img src='https://github.com/hbgyeom.png' height=130 width=130></img>
-| <a href="https://github.com/Chii-kawa" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/siu-Kyu" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/hbgyeom" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | 
+| <a href="https://github.com/Chii-kawa" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/taewoong1" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | <a href="https://github.com/hbgyeom" target="_blank"><img src="https://img.shields.io/badge/GitHub-black.svg?&style=round&logo=github"/></a> | 
 
 <br>
 
