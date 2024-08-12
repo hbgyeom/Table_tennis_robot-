@@ -15,12 +15,12 @@
 <br>
 
 ## 1. Overview
-<img src="https://github.com/user-attachments/assets/b27a98cd-681b-454e-ae11-3ae0179b1f77" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/b27a98cd-681b-454e-ae11-3ae0179b1f77" alt="image" width="100"/>
 
 <br><br>
 >기존의 탁구로봇은 단순히 로봇 팔을 사용해 공을 위로 올려주거나 부드럽게 전달하는 방식을 취합니다. 이 방식은 사람과의 릴레이에 부적합하며, 모터를 많이 사용해야해서 축이 많아짐에 따라 제어에 어려움이 있다고 판단하였습니다.
+<img src="https://github.com/user-attachments/assets/dd6b966e-aca8-41a6-b32b-53e7fb499562" alt="image" width="100"/>
 
-![image](https://github.com/user-attachments/assets/dd6b966e-aca8-41a6-b32b-53e7fb499562)
 <br><br>
 
 >저희가 만든 로봇은 공을 정교한 타이밍에 정확하게 밀어쳐서 목표 지점으로 강력하게 보내며 실제 탁구 선수의 강력한 스매싱처럼 공을 날카롭게 날려 보냅니다. 제어해야 하는 모터는 1개로 기존 로봇의 단점을 해결하였습니다. 
