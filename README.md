@@ -15,11 +15,11 @@
 <br>
 
 ## 1. Overview
-<img src="https://github.com/user-attachments/assets/b27a98cd-681b-454e-ae11-3ae0179b1f77" alt="image" width="100"/>
+<img src="https://github.com/user-attachments/assets/b27a98cd-681b-454e-ae11-3ae0179b1f77" alt="image" width="1000"/>
 
 <br><br>
 >기존의 탁구로봇은 단순히 로봇 팔을 사용해 공을 위로 올려주거나 부드럽게 전달하는 방식을 취합니다. 이 방식은 사람과의 릴레이에 부적합하며, 모터를 많이 사용해야해서 축이 많아짐에 따라 제어에 어려움이 있다고 판단하였습니다.
-<img src="https://github.com/user-attachments/assets/dd6b966e-aca8-41a6-b32b-53e7fb499562" alt="image" width="100"/>
+<img src="https://github.com/user-attachments/assets/dd6b966e-aca8-41a6-b32b-53e7fb499562" alt="image" width="1000"/>
 
 <br><br>
 
