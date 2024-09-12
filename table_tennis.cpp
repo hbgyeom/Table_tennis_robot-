@@ -10,39 +10,18 @@
 #include <time.h>
 
 
+
 //#define TOP_W = 270
 //#define TOP_H = 170
 //#define SIDE_W = 160
 //#define SIDE_H = 100
 //#define MAX_HALF_WIDTH = 70
 
-/*
-
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*   
-*
-*
-    
-*/
 char mot_file[] = "C:/Users/user/Desktop/DynamixelSDK-master/DynamixelSDK-master/c++/example/protocol1.0/read_write/win64/src/mot/ajin20190628.mot";        // *.mot file Path
 
 int vel = 2000;
 int accel = 700;
-int current_position = 65;   // current positionÀÇ À§Ä¡¸¦ Ç×»ó ±â·ÏÇÔ
+int current_position = 65;   // current positionì˜ ìœ„ì¹˜ë¥¼ í•­ìƒ ê¸°ë¡í•¨
 int shared_position = 65;
 float topcam_m = 0;
 int fire = 0;
@@ -67,9 +46,9 @@ std::chrono::system_clock::time_point abs_start = std::chrono::system_clock::now
 
 #define PROTOCOL_VERSION                1.0
 
-#define DXL12_ID                        12  // ¹Ù´Ú
-#define DXL3_ID                         3   //À§¾Æ·¡
-#define DXL2_ID                         2   //¹ß»ç
+#define DXL12_ID                        12  // ë°”ë‹¥
+#define DXL3_ID                         3   //ìœ„ì•„ë˜
+#define DXL2_ID                         2   //ë°œì‚¬
 
 #define BAUDRATE                        115200
 #define DEVICENAME                      "COM4"
@@ -192,7 +171,7 @@ void CLinear_actu::move_actu(int pos)
 
 
 int thread1Function() {
-    //std::chrono::system_clock::time_point top_abs_time = std::chrono::system_clock::now();      // buffer¸¦ °í·ÁÇÏ¸é 0.032¸¦ »©¾ß ÇÒ ¼öµµ
+    //std::chrono::system_clock::time_point top_abs_time = std::chrono::system_clock::now();      // bufferë¥¼ ê³ ë ¤í•˜ë©´ 0.032ë¥¼ ë¹¼ì•¼ í•  ìˆ˜ë„
 
     int frame_width = 640;
     int frame_height = 480;
@@ -200,19 +179,19 @@ int thread1Function() {
     int side_exp = -7;
     int top_desired_fps = 90;
     int side_desired_fps = 90;
-    //float top_abs_time = 0;   // ÇÁ·¹ÀÓÀ» ¹Ş¾Æ¿À±â ÀüÀÇ ½Ã°£À» ¹ŞÀ»Áö ¾Æ´Ï¸é ÇÁ·¹ÀÓÀ» ¹Ş¾Æ¿Â ÈÄÀÇ ½Ã°£À» ¹ŞÀ»Áö 
-    float side_abs_time = 0;   // ÇÁ·¹ÀÓÀ» ¹Ş¾Æ¿À´Â delay°¡ 0.003 ~ 0.016 Á¤µµ 
-    // ±×·±µ¥ ¾öÃ» °¡²û¾¿ 0.06ÃÊ delay°¡ °É¸®´Â °Íµµ °°À½
+    //float top_abs_time = 0;   // í”„ë ˆì„ì„ ë°›ì•„ì˜¤ê¸° ì „ì˜ ì‹œê°„ì„ ë°›ì„ì§€ ì•„ë‹ˆë©´ í”„ë ˆì„ì„ ë°›ì•„ì˜¨ í›„ì˜ ì‹œê°„ì„ ë°›ì„ì§€ 
+    float side_abs_time = 0;   // í”„ë ˆì„ì„ ë°›ì•„ì˜¤ëŠ” delayê°€ 0.003 ~ 0.016 ì •ë„ 
+    // ê·¸ëŸ°ë° ì—„ì²­ ê°€ë”ì”© 0.06ì´ˆ delayê°€ ê±¸ë¦¬ëŠ” ê²ƒë„ ê°™ìŒ
     float prev_side_abs_time = 0;
-    int current_state = 0;   // °øÀÌ ¿À´Â »óÅÂ°¡ 0, °øÀ» Ä¡´Â »óÅÂ°¡ 1, °øÀÌ °¡´Â »óÅÂ°¡ 2, ( °øÀ» ´ë±âÇÏ´Â »óÅÂ°¡ 3 )
-    // °øÀ» ´ë±âÇÏ´Â »óÅÂ 0 , °øÀÌ ¿À´Â »óÅÂ 1, °øÀ» Ä¡´Â »óÅÂ 2, ( °øÀÌ °¡´Â »óÅÂ 3 )
-    // state¸¦ ±¸ºĞÇÏ´Â ¹æ¹ıÀº top camÀÇ yÁÂÇ¥ º¯È­¸¦ ÀÌ¿ëÇØ¼­ ºñ±³ÇÏ°Å³ª 
-    // state¸¦ ÀÌ¿ëÇØ¼­ ±¸ºĞÇÑ´Ù¸é state transitionÀÇ Á¶°ÇÀ» ÀâÈù °øÀÇ yÁÂÇ¥¸¦ ÀÌ¿ëÇØ¼­ ±¸ÇÏ´Â ¹æ¹ıµµ ÀÖÀ½
-    // ÀÌ¹æ¹ıÀ» »ç¿ëÇÏ¸é ÇÑ ÇÁ·¹ÀÓÀ¸·Îµµ ¹Ù·Î state¸¦ ±¸ÇÒ ¼ö ÀÖ´Ù´Â ÀåÁ¡ÀÌ ÀÖÀ½   
-    float top_k = 0.365f;   // Å¹±¸´ë ¹Ù´Ú¸é¿¡¼­ÀÇ ÇÈ¼¿ cm ºñÀ². top camÀ¸·ÎºÎÅÍ 140cm ±âÁØ.   46.6cm / 171px
-    float side_k = 0.6202f;   // Å¹±¸´ë Áß¾Ó¸é¿¡¼­ÀÇ ÇÈ¼¿ cm ºñÀ². side camÀ¸·ÎºÎÅÍ 287cm ±âÁØ   80cm / 129px
+    int current_state = 0;   // ê³µì´ ì˜¤ëŠ” ìƒíƒœê°€ 0, ê³µì„ ì¹˜ëŠ” ìƒíƒœê°€ 1, ê³µì´ ê°€ëŠ” ìƒíƒœê°€ 2, ( ê³µì„ ëŒ€ê¸°í•˜ëŠ” ìƒíƒœê°€ 3 )
+    // ê³µì„ ëŒ€ê¸°í•˜ëŠ” ìƒíƒœ 0 , ê³µì´ ì˜¤ëŠ” ìƒíƒœ 1, ê³µì„ ì¹˜ëŠ” ìƒíƒœ 2, ( ê³µì´ ê°€ëŠ” ìƒíƒœ 3 )
+    // stateë¥¼ êµ¬ë¶„í•˜ëŠ” ë°©ë²•ì€ top camì˜ yì¢Œí‘œ ë³€í™”ë¥¼ ì´ìš©í•´ì„œ ë¹„êµí•˜ê±°ë‚˜ 
+    // stateë¥¼ ì´ìš©í•´ì„œ êµ¬ë¶„í•œë‹¤ë©´ state transitionì˜ ì¡°ê±´ì„ ì¡íŒ ê³µì˜ yì¢Œí‘œë¥¼ ì´ìš©í•´ì„œ êµ¬í•˜ëŠ” ë°©ë²•ë„ ìˆìŒ
+    // ì´ë°©ë²•ì„ ì‚¬ìš©í•˜ë©´ í•œ í”„ë ˆì„ìœ¼ë¡œë„ ë°”ë¡œ stateë¥¼ êµ¬í•  ìˆ˜ ìˆë‹¤ëŠ” ì¥ì ì´ ìˆìŒ   
+    float top_k = 0.365f;   // íƒêµ¬ëŒ€ ë°”ë‹¥ë©´ì—ì„œì˜ í”½ì…€ cm ë¹„ìœ¨. top camìœ¼ë¡œë¶€í„° 140cm ê¸°ì¤€.   46.6cm / 171px
+    float side_k = 0.6202f;   // íƒêµ¬ëŒ€ ì¤‘ì•™ë©´ì—ì„œì˜ í”½ì…€ cm ë¹„ìœ¨. side camìœ¼ë¡œë¶€í„° 287cm ê¸°ì¤€   80cm / 129px
     float prev_h = 0, h = 0;
-    int top_x = 0, top_y = 0, top_w = 0, top_h = 0; // 2ºĞÀÇ 1À» ³ªÁß¿¡ ÇÑ²¨¹ø¿¡ ÇÏ¸é ÁÁÀ»µí float·Î 
+    int top_x = 0, top_y = 0, top_w = 0, top_h = 0; // 2ë¶„ì˜ 1ì„ ë‚˜ì¤‘ì— í•œêº¼ë²ˆì— í•˜ë©´ ì¢‹ì„ë“¯ floatë¡œ 
     int prev_top_y = 0;
     int side_x = 0, side_y = 0, side_w = 0, side_h = 0;
     int top_center_x = 0, top_center_y = 0, side_center_x = 0, side_center_y = 0;
@@ -238,7 +217,7 @@ int thread1Function() {
     //cv::VideoCapture topcam(0, cv::CAP_DSHOW);
     //cv::VideoCapture sidecam(1, cv::CAP_DSHOW);
     cv::VideoCapture topcam(0);
-    //cv::VideoCapture sidecam(0);   // ´ÜÀÚ¸¦ Á÷Á¢ ÁöÁ¤ÇÏ´Â ¹æ¹ı »ı°¢
+    //cv::VideoCapture sidecam(0);   // ë‹¨ìë¥¼ ì§ì ‘ ì§€ì •í•˜ëŠ” ë°©ë²• ìƒê°
 
     // Set the desired frame rate         initializing camera 
     topcam.set(cv::CAP_PROP_FRAME_WIDTH, frame_width);
@@ -254,13 +233,13 @@ int thread1Function() {
     printf("\n----- top cam fps  : %f -----", topcam.get(cv::CAP_PROP_FPS));
     //printf("\n----- side cam fps : %f -----\n", sidecam.get(cv::CAP_PROP_FPS));
 
-    // Ã¹ÇÁ·¹ÀÓ¿¡¼­ »çÀÌµå¸¦ ½ÇÇàÇØ¼­ »çÀÌµåÀÇ Ã¹ÇÁ·¹ÀÓÀ» °¡Á®¿À±â  top -> side -> side
+    // ì²«í”„ë ˆì„ì—ì„œ ì‚¬ì´ë“œë¥¼ ì‹¤í–‰í•´ì„œ ì‚¬ì´ë“œì˜ ì²«í”„ë ˆì„ì„ ê°€ì ¸ì˜¤ê¸°  top -> side -> side
 
 
-    while (true) {      //  ¼­ºê
+    while (true) {      //  ì„œë¸Œ
         std::chrono::system_clock::time_point top_abs_time = std::chrono::system_clock::now();
         topcam >> top_frame;
-        top_frame = top_frame(cv::Range(80, 480), cv::Range(145, 493));      // 260 À§¾Æ·¡¸¦ °¡´ÉÇÑ ÇÑ Å¸ÀÌÆ®ÇÏ°Ô, topÀº ´ëÄªµÇ°Ô Àß¶úÀ½
+        top_frame = top_frame(cv::Range(80, 480), cv::Range(145, 493));      // 260 ìœ„ì•„ë˜ë¥¼ ê°€ëŠ¥í•œ í•œ íƒ€ì´íŠ¸í•˜ê²Œ, topì€ ëŒ€ì¹­ë˜ê²Œ ì˜ëìŒ
         cv::inRange(top_frame, top_low, top_upp, top_mask);
         cv::Rect boundingRect = cv::boundingRect(top_mask);
 
@@ -276,10 +255,10 @@ int thread1Function() {
                 actuator.move_actu(65);
                 std::this_thread::sleep_for(std::chrono::microseconds(100));
             }
-            continue;  // Á¶°Ç¿¡ ¸ÂÁö ¾ÊÀ¸¸é ¹Ù·Î ´ÙÀ½ ·çÇÁ·Î ³Ñ¾î°¨
+            continue;  // ì¡°ê±´ì— ë§ì§€ ì•Šìœ¼ë©´ ë°”ë¡œ ë‹¤ìŒ ë£¨í”„ë¡œ ë„˜ì–´ê°
         }
 
-        top_center_x = 2 * top_x + top_w;   // °øÀÌ ¿òÁ÷ÀÌ¸é¼­ ¹İÁö¸§ÀÌ ¸¹ÀÌ º¯ÇØ¼­ ÀÌ ºÎºĞÀ» »ı·«ÇÏ´Â °ÍÀº ¾î·Á¿ïµí
+        top_center_x = 2 * top_x + top_w;   // ê³µì´ ì›€ì§ì´ë©´ì„œ ë°˜ì§€ë¦„ì´ ë§ì´ ë³€í•´ì„œ ì´ ë¶€ë¶„ì„ ìƒëµí•˜ëŠ” ê²ƒì€ ì–´ë ¤ìš¸ë“¯
         top_center_y = 2 * top_y + top_h;   // calculate center of rectangle
         prev_top_y = top_y;
 
@@ -290,7 +269,7 @@ int thread1Function() {
         if (delta_y > 100) {  // use p and current
             abs_start = top_abs_time;
             topcam_m = -(top_center_y - pp_top_center_y) / (top_center_x - pp_top_center_x + 0.0000019073486328125f);
-            //printf("^^^^^^^^^^ ¼­ºê first ball detected ^^^^^^^^^^^^  m is %f\n\n", topcam_m);
+            //printf("^^^^^^^^^^ ì„œë¸Œ first ball detected ^^^^^^^^^^^^  m is %f\n\n", topcam_m);
             if (top_center_y - prev_top_center_y > 60) {
                 delta = top_center_y - prev_top_center_y;    // pass over? (gyeom's expression) to global va
             }
@@ -346,12 +325,12 @@ int thread1Function() {
         std::chrono::system_clock::time_point top_abs_time = std::chrono::system_clock::now();
         topcam >> top_frame;
         //std::chrono::system_clock::time_point side_abs_time = std::chrono::system_clock::now();
-        //sidecam >> side_frame;      // ¸¸¾à top w != 0ÀÌ È®ÀÎµÇ°í ³ª¼­ ÇÁ·¹ÀÓÀ» ¹Ş¾Æ¿À´Â°Ô À¯¸®ÇÒ ¼öµµ.... 
-        // ±Ùµ¥ side ½Ã°£ °£°İÀ» È®º¸ÇÏ±â À§ÇØ¼­´Â side¸¦ ¸ÕÀú ¹Ş¾Æ¿À´Â°Ô À¯¸®ÇÒ¼öµµ?
+        //sidecam >> side_frame;      // ë§Œì•½ top w != 0ì´ í™•ì¸ë˜ê³  ë‚˜ì„œ í”„ë ˆì„ì„ ë°›ì•„ì˜¤ëŠ”ê²Œ ìœ ë¦¬í•  ìˆ˜ë„.... 
+        // ê·¼ë° side ì‹œê°„ ê°„ê²©ì„ í™•ë³´í•˜ê¸° ìœ„í•´ì„œëŠ” sideë¥¼ ë¨¼ì € ë°›ì•„ì˜¤ëŠ”ê²Œ ìœ ë¦¬í• ìˆ˜ë„?
 
-        //top_frame = top_frame(cv::Range(70, 410), cv::Range(50, 590));      // À§¾Æ·¡¸¦ °¡´ÉÇÑ ÇÑ Å¸ÀÌÆ®ÇÏ°Ô, topÀº ´ëÄªµÇ°Ô Àß¶úÀ½
-        //top_frame = top_frame(cv::Range(70, 410), cv::Range(70, 570));      // 250 À§¾Æ·¡¸¦ °¡´ÉÇÑ ÇÑ Å¸ÀÌÆ®ÇÏ°Ô, topÀº ´ëÄªµÇ°Ô Àß¶úÀ½
-        top_frame = top_frame(cv::Range(80, 440), cv::Range(145, 493));      // 260 À§¾Æ·¡¸¦ °¡´ÉÇÑ ÇÑ Å¸ÀÌÆ®ÇÏ°Ô, topÀº ´ëÄªµÇ°Ô Àß¶úÀ½
+        //top_frame = top_frame(cv::Range(70, 410), cv::Range(50, 590));      // ìœ„ì•„ë˜ë¥¼ ê°€ëŠ¥í•œ í•œ íƒ€ì´íŠ¸í•˜ê²Œ, topì€ ëŒ€ì¹­ë˜ê²Œ ì˜ëìŒ
+        //top_frame = top_frame(cv::Range(70, 410), cv::Range(70, 570));      // 250 ìœ„ì•„ë˜ë¥¼ ê°€ëŠ¥í•œ í•œ íƒ€ì´íŠ¸í•˜ê²Œ, topì€ ëŒ€ì¹­ë˜ê²Œ ì˜ëìŒ
+        top_frame = top_frame(cv::Range(80, 440), cv::Range(145, 493));      // 260 ìœ„ì•„ë˜ë¥¼ ê°€ëŠ¥í•œ í•œ íƒ€ì´íŠ¸í•˜ê²Œ, topì€ ëŒ€ì¹­ë˜ê²Œ ì˜ëìŒ
         cv::inRange(top_frame, top_low, top_upp, top_mask);
         //cv2.imwrite('R-RGB.jpg', image[:, : , 2]) // use only red channel for faster code
         cv::Rect boundingRect = cv::boundingRect(top_mask);
@@ -361,10 +340,10 @@ int thread1Function() {
         top_w = boundingRect.width;
         top_h = boundingRect.height;
         if (prev_top_y == top_y || top_w == 0 || top_h > 30) {
-            continue;  // Á¶°Ç¿¡ ¸ÂÁö ¾ÊÀ¸¸é ¹Ù·Î ´ÙÀ½ ·çÇÁ·Î ³Ñ¾î°¨
+            continue;  // ì¡°ê±´ì— ë§ì§€ ì•Šìœ¼ë©´ ë°”ë¡œ ë‹¤ìŒ ë£¨í”„ë¡œ ë„˜ì–´ê°
         }
 
-        top_center_x = top_x + top_w / 2;   // °øÀÌ ¿òÁ÷ÀÌ¸é¼­ ¹İÁö¸§ÀÌ ¸¹ÀÌ º¯ÇØ¼­ ÀÌ ºÎºĞÀ» »ı·«ÇÏ´Â °ÍÀº ¾î·Á¿ïµí
+        top_center_x = top_x + top_w / 2;   // ê³µì´ ì›€ì§ì´ë©´ì„œ ë°˜ì§€ë¦„ì´ ë§ì´ ë³€í•´ì„œ ì´ ë¶€ë¶„ì„ ìƒëµí•˜ëŠ” ê²ƒì€ ì–´ë ¤ìš¸ë“¯
         top_center_y = top_y + top_h / 2;   // calculate center of rectangle
         prev_top_y = top_y;
         printf("B Radius w = %d, h = %d\n", top_w, top_h);
@@ -416,13 +395,6 @@ int thread1Function() {
     }
     return 0;
 }
-
-
-
-
-
-
-
 
 int thread2Function() {
     dynamixel::PortHandler* portHandler = dynamixel::PortHandler::getPortHandler(DEVICENAME);
@@ -505,14 +477,10 @@ int thread2Function() {
     {
         printf("Dynamixel 3 has been successfully connected \n");
     }
-    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL2_ID, ADDR_MX_GOAL_POSITION, 2700, &dxl_error); // ÀåÀü »óÅÂ·Î ¹Ù²ãÁÜ
-    //dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL3_ID, ADDR_MX_GOAL_POSITION, 1565, &dxl_error); // À§¾Æ·¡ °¢µµ ¼³Á¤     ³·Àº º£½ºÆ®
-    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL3_ID, ADDR_MX_GOAL_POSITION, 1590, &dxl_error); // À§¾Æ·¡ °¢µµ ¼³Á¤
-    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL12_ID, ADDR_MX_GOAL_POSITION, 740, &dxl_error); // ÁÂ¿ì °¢µµ ¼³Á¤
-
-
-
-
+    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL2_ID, ADDR_MX_GOAL_POSITION, 2700, &dxl_error); // ì¥ì „ ìƒíƒœë¡œ ë°”ê¿”ì¤Œ
+    //dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL3_ID, ADDR_MX_GOAL_POSITION, 1565, &dxl_error); // ìœ„ì•„ë˜ ê°ë„ ì„¤ì •     ë‚®ì€ ë² ìŠ¤íŠ¸
+    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL3_ID, ADDR_MX_GOAL_POSITION, 1590, &dxl_error); // ìœ„ì•„ë˜ ê°ë„ ì„¤ì •
+    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL12_ID, ADDR_MX_GOAL_POSITION, 740, &dxl_error); // ì¢Œìš° ê°ë„ ì„¤ì •
 
     float theta = 0;
     float beta = 0;
@@ -526,8 +494,8 @@ int thread2Function() {
 
     while (true) {
         if (fire) {
-            // Ãß°¡ÇÒ °Í : ³ôÀÌ °è»ê ½Ã°£ °è»ê
-            // ¾ÆÅ©ÅºÁ¨Æ® Ãß°¡ÇÏ±â 
+            // ì¶”ê°€í•  ê²ƒ : ë†’ì´ ê³„ì‚° ì‹œê°„ ê³„ì‚°
+            // ì•„í¬íƒ„ì  íŠ¸ ì¶”ê°€í•˜ê¸° 
             // get ball position and delta_y. calculate velocity and time.
             get_delta = static_cast<float>(delta) / 2;
             theta = atan(topcam_m);
@@ -544,10 +512,10 @@ int thread2Function() {
 
             printf("theta is %f, beta is %f, tilt value is %d\n", theta, beta, tilt);
 
-            // ¹Ş´Â ³ôÀÌ Á¶Àı
+            // ë°›ëŠ” ë†’ì´ ì¡°ì ˆ
             // dxl_comm_result = packetHandler->write2ByteTxRx(portHandler,             , ADDR_MX_GOAL_POSITION, 480, &dxl_error); 
 
-            // ¹Ş´Â À§¾Æ·¡ °¢µµ Á¶Àı
+            // ë°›ëŠ” ìœ„ì•„ë˜ ê°ë„ ì¡°ì ˆ
             // dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL3_ID, ADDR_MX_GOAL_POSITION, 480, &dxl_error); 
 
            // dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL12_ID, ADDR_MX_GOAL_POSITION, static_cast<int>((theta + beta) * 325.95 - 1024 + 740), &dxl_error);    // tilt
@@ -557,37 +525,30 @@ int thread2Function() {
 
             printf("BP = %d, delta = %f, delta (cm) = %f\n", ball_position, get_delta, get_delta * 0.3773f);
             //estimated_time = static_cast<int>(kk * (317 - 0.2725 * ball_position) / delta);
-            //estimated_time = static_cast<int>(1000 * (std::exp((295.4 - 0.2725 * ball_position) * 0.00134) - 1) / (0.00134 * 0.2725 * delta / 0.016)); //°ø±âÀúÇ× ½Ä (e^sk - 1) / k * v_0¿¡ ´ëÀÔÇÑ °ª
-            //estimated_time = static_cast<int>(1000 * (std::exp((225 + 160*.3373   ->    285.4 - 0.3773 * ball_position) * 0.00134) - 1) / (0.00134 * 0.3773 * delta / 0.016)); //°ø±âÀúÇ× ½Ä (e^sk - 1) / k * v_0¿¡ ´ëÀÔÇÑ °ª
-            estimated_time = static_cast<int>((std::exp(0.396 - 0.000505582 * static_cast<int>(ball_position)) - 1) * 31646.7f / get_delta); //°ø±âÀúÇ× ½Ä (e^sk - 1) / k * v_0¿¡ ´ëÀÔÇÑ °ª
+            //estimated_time = static_cast<int>(1000 * (std::exp((295.4 - 0.2725 * ball_position) * 0.00134) - 1) / (0.00134 * 0.2725 * delta / 0.016)); //ê³µê¸°ì €í•­ ì‹ (e^sk - 1) / k * v_0ì— ëŒ€ì…í•œ ê°’
+            //estimated_time = static_cast<int>(1000 * (std::exp((225 + 160*.3373   ->    285.4 - 0.3773 * ball_position) * 0.00134) - 1) / (0.00134 * 0.3773 * delta / 0.016)); //ê³µê¸°ì €í•­ ì‹ (e^sk - 1) / k * v_0ì— ëŒ€ì…í•œ ê°’
+            estimated_time = static_cast<int>((std::exp(0.396 - 0.000505582 * static_cast<int>(ball_position)) - 1) * 31646.7f / get_delta); //ê³µê¸°ì €í•­ ì‹ (e^sk - 1) / k * v_0ì— ëŒ€ì…í•œ ê°’
             std::chrono::system_clock::time_point abs_end = std::chrono::system_clock::now();
             std::chrono::duration<int, std::milli> elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(abs_end - abs_start);
-            printf("¹ß»ç~~~~~~ \nelapsed time is %d, estimated time is %d, delta = %f\n\n", elapsed_time.count(), estimated_time, get_delta);
+            printf("ë°œì‚¬~~~~~~ \nelapsed time is %d, estimated time is %d, delta = %f\n\n", elapsed_time.count(), estimated_time, get_delta);
             std::this_thread::sleep_for(std::chrono::milliseconds(estimated_time - elapsed_time.count()));
 
             dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL2_ID, ADDR_MX_GOAL_POSITION, 1405, &dxl_error);
             std::this_thread::sleep_for(std::chrono::milliseconds(800));
             dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL2_ID, ADDR_MX_GOAL_POSITION, 2700, &dxl_error);
-            printf("µÇµ¹¾Æ°¡´ÂÁß~~~~~~~~~~~~~~~~~~~\n\n");
+            printf("ë˜ëŒì•„ê°€ëŠ”ì¤‘~~~~~~~~~~~~~~~~~~~\n\n");
             fire = 0;
             //serve = 0;
-
-
-
-
-
 
             // linear return code
 
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(16)); // ¾øÀ¸¸é °è¼Ó Á¶»çÇØ¼­ µô·¹ÀÌ°¡ ¹ß»ıÇÏ´Âµí polling
+        std::this_thread::sleep_for(std::chrono::milliseconds(16)); // ì—†ìœ¼ë©´ ê³„ì† ì¡°ì‚¬í•´ì„œ ë”œë ˆì´ê°€ ë°œìƒí•˜ëŠ”ë“¯ polling
         //if (!serve) {
-        //    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL3_ID, ADDR_MX_GOAL_POSITION, 1580, &dxl_error); // À§¾Æ·¡ °¢µµ ¼³Á¤
+        //    dxl_comm_result = packetHandler->write2ByteTxRx(portHandler, DXL3_ID, ADDR_MX_GOAL_POSITION, 1580, &dxl_error); // ìœ„ì•„ë˜ ê°ë„ ì„¤ì •
 
         //}
     }
-
-
 
     // Disable Dynamixel Torque
     dxl_comm_result = packetHandler->write1ByteTxRx(portHandler, DXL2_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_DISABLE, &dxl_error);
@@ -616,7 +577,7 @@ int thread3Function() {
                 reset_linear = 1;
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(300)); // ¾øÀ¸¸é °è¼Ó Á¶»çÇØ¼­ µô·¹ÀÌ°¡ ¹ß»ıÇÏ´Âµí polling
+        std::this_thread::sleep_for(std::chrono::milliseconds(300)); // ì—†ìœ¼ë©´ ê³„ì† ì¡°ì‚¬í•´ì„œ ë”œë ˆì´ê°€ ë°œìƒí•˜ëŠ”ë“¯ polling
     }
 }
 
@@ -633,6 +594,3 @@ int main() {
 
     return 0;
 }
-
-
-
